@@ -1,17 +1,20 @@
-uniform float time;
-uniform vec2 mouse;
+#ifdef GL_ES
+precision mediump float;
+#endif
+
 uniform vec2 resolution;
 
-void main( void ) {
+//円の距離函数
+float circle(vec2 p)
+{
+	return length(p);
+}
 
-	vec2 position = ( gl_FragCoord.xy / resolution.xy ) + mouse / 4.0;
+void main()
+{
+	vec2 p =(gl_FragCoord.xy * 2.0 - resolution)/min(resolution.x, resolution.y);
 
-	float color = 0.0
-	color += sin( position.x * cos( time / 15.0 ) * 80.0 ) + cos( position.y * cos( time / 15.0 ) * 10.0 );
-	color += sin( position.y * sin( time / 10.0 ) * 40.0 ) + cos( position.x * sin( time / 25.0 ) * 40.0 );
-	color += sin( position.x * sin( time / 5.0 ) * 10.0 ) + sin( position.y * sin( time / 35.0 ) * 80.0 );
-	color *= sin( time / 10.0 ) * 0.5;
-
-	gl_FragColor = vec4( vec3( color, color * 0.5, sin( color + time / 3.0 ) * 12  ), 1.0 );
-
+	float d = circle(p);
+	vec3 color = vec3(d);
+	gl_FragColor = vec4(color, 1.0);
 }
